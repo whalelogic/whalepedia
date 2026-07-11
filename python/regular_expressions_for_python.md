@@ -1,10 +1,3 @@
----
-title: Mastering Regular Expressions: A Comprehensive Guide
-author: Keith Thomson
-description: Regular expressions (regex) are a powerful tool for pattern matching and text manipulation. They allow you to search, extract, and replace specific patterns within strings, making them invaluable for tasks like data validation, parsing, text mining, log analysis, and search-and-replace operations.
-tags: [python, regex, regular-expressions, programming, guide]
----
-
 ## 📌 Introduction
 
 Regular expressions (regex) are a **🔥 powerful tool** for **pattern matching** and **text manipulation**. They allow you to **🔍 search, 📝 extract, and 🔄 replace** specific patterns within strings, making them invaluable for tasks like:

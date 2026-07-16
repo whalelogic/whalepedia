@@ -1,10 +1,3 @@
----
-title: Using Google BigQuery with Python: A Practical Guide
-author: Keith Thomson
-description: Google BigQuery is a fully-managed, serverless data warehouse that enables scalable analysis over petabytes of data. When combined with Python, it becomes a powerful tool for data engineers, analysts, and scientists.
-tags: [python, google-cloud, bigquery, gcp, data-engineering, guide]
----
-
 ## A Practical Guide 🦮
 
 ![](https://locusit.com/wp-content/uploads/2024/12/Google-BigQuery.jpeg)

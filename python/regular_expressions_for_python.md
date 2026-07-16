@@ -1,10 +1,3 @@
----
-title: Mastering Regular Expressions: A Comprehensive Guide
-author: Keith Thomson
-description: Regular expressions (regex) are a powerful tool for pattern matching and text manipulation. They allow you to search, extract, and replace specific patterns within strings, making them invaluable for tasks like data validation, parsing, text mining, log analysis, and search-and-replace operations.
-tags: [python, regex, regular-expressions, programming, guide]
----
-
 ## 📌 Introduction
 
 Regular expressions (regex) are a **🔥 powerful tool** for **pattern matching** and **text manipulation**. They allow you to **🔍 search, 📝 extract, and 🔄 replace** specific patterns within strings, making them invaluable for tasks like:
@@ -192,19 +185,6 @@ print(re.match(phone_pattern, "12345"))  # ❌ Invalid
 ## 🛠️ Debugging and Testing 
 - Use online tools like [Regex101](https://regex101.com/) to test and debug regex patterns.
 - Break complex patterns into smaller, manageable parts.
-
----
-
-## 📊 Regex Cheat Sheet
-![Regex Cheat Sheet](https://i.imgur.com/OQStwMn.png)
-Credit: *https://i.imgur.com/OQStwMn.png*
-
----
-
-
-## 🎯 Conclusion 
-
-Regular expressions are a versatile and powerful tool for text processing. By mastering the syntax and applying best practices, you can efficiently solve a wide range of string manipulation tasks. Start with simple patterns, gradually build complexity, and always test your regex against real-world data.
 
 **Next Steps:**
 - Practice with real-world datasets.

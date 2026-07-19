@@ -1,4 +1,4 @@
-# Powershell Automation
+# PowerShell Automation
 
 Normalized kebab-case alias for `PowerShell-Automation.md`.
 

@@ -1,4 +1,4 @@
-# Powershell Reference
+# PowerShell Reference
 
 Normalized kebab-case alias for `PowerShell-Reference.md`.
 

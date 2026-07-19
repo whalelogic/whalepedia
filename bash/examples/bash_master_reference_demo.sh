@@ -25,8 +25,8 @@ echo
 
 readonly max_jobs=4
 jobs_to_run="${2:-3}"
-if [[ ! "$jobs_to_run" =~ ^[0-9]+$ ]]; then
-  echo "Invalid jobs value '${jobs_to_run}' (expected a non-negative integer), defaulting to 3"
+if [[ ! "$jobs_to_run" =~ ^[1-9][0-9]*$ ]]; then
+  echo "Invalid jobs value '${jobs_to_run}' (expected a positive integer), defaulting to 3"
   jobs_to_run=3
 fi
 if (( jobs_to_run > max_jobs )); then

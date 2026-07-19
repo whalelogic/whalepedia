@@ -24,10 +24,11 @@ echo "Name length: ${#name}"
 echo
 
 readonly max_jobs=4
-jobs_to_run="${2:-3}"
-if [[ ! "$jobs_to_run" =~ ^(0|[1-9][0-9]*)$ ]]; then
-  echo "Invalid jobs value '${jobs_to_run}' (expected a non-negative integer), defaulting to 3"
-  jobs_to_run=3
+readonly default_jobs=3
+jobs_to_run="${2:-$default_jobs}"
+if [[ ! "$jobs_to_run" =~ ^[1-9][0-9]*$ ]]; then
+  echo "Invalid jobs value '${jobs_to_run}' (expected a positive integer), defaulting to ${default_jobs}"
+  jobs_to_run=$default_jobs
 fi
 if (( jobs_to_run > max_jobs )); then
   echo "Requested jobs exceed max (${max_jobs}), capping to max"

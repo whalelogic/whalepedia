@@ -16,11 +16,11 @@ printf ' [%s]' "$@"
 printf '\n'
 echo
 
-name="${1:-world}"
+target_name="${1:-world}"
 greeting="${GREETING:-hello}"
-echo "${greeting^}, ${name}!"
+echo "${greeting^}, ${target_name}!"
 echo "Lowercase greeting: ${greeting,,}"
-echo "Name length: ${#name}"
+echo "Name length: ${#target_name}"
 echo
 
 readonly max_jobs=4
@@ -77,7 +77,7 @@ printf 'alpha\nbeta\ngamma\n' | grep -E 'a$' | wc -l
 echo "PIPESTATUS: ${PIPESTATUS[*]}"
 echo
 
-case "$name" in
+case "$target_name" in
   admin|root) echo "Privileged name detected" ;;
   *) echo "Standard name path" ;;
 esac

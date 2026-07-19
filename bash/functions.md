@@ -1,22 +1,34 @@
 # Bash Functions
 
-Function patterns, signatures, and common built-ins.
+Bash functions organize shell logic and are commonly paired with built-in command helpers.
 
-| Function Pattern | Description |
-| --- | --- |
-| Named function | Reusable unit with a stable name |
-| Anonymous/lambda function | Inline function for small logic |
-| Variadic/rest function | Accepts variable argument count |
-| Higher-order function | Receives or returns functions |
+## Function Patterns
 
-| Built-in / Common Function | Purpose |
-| --- | --- |
-| print/log | Output values for debugging |
-| format/string interpolation | Build readable messages |
-| error/exception handling helper | Propagate and handle failures |
+| Pattern | Purpose | Example |
+| --- | --- | --- |
+| `name() { ...; }` | Declare reusable function | `log() { printf '%s\n' "$1"; }` |
+| `local var=value` | Scoped variables in function | `local count=0` |
+| `return N` | Return status code (0 success) | `return 1` |
+| `"$@"` | Forward all arguments safely | `run_all "$@"` |
+| `$(func ...)` | Capture function output | `result=$(build_id)` |
 
-## Example
+## Built-in Commands Commonly Used in Functions
 
-```text
-transform(data, fn)
+| Built-in | Purpose | Example |
+| --- | --- | --- |
+| `printf` | Safe output formatting | `printf 'id=%s\n' "$id"` |
+| `read` | Read user input | `read -r name` |
+| `test` / `[` | Conditional checks | `[ -f "$file" ]` |
+| `declare` | Set attributes/types | `declare -i total=0` |
+| `trap` | Cleanup on signals/exit | `trap cleanup EXIT` |
+
+## Examples
+
+```bash
+greet() {
+  local name="$1"
+  printf 'hello, %s\n' "$name"
+}
+
+greet "whalepedia"
 ```

@@ -1,18 +1,26 @@
 # PowerShell Strings
 
-Core string operations and helpers.
+PowerShell uses .NET `System.String` plus shell operators for practical text processing.
 
-| Function / Method | Purpose | Example |
+## Common String Methods and Operators
+
+| Method / Operator | Purpose | Example |
 | --- | --- | --- |
-| length/len | Get string length | `len(s)` or equivalent |
-| contains/includes | Substring check | `contains(s, "api")` |
-| split | Break into parts | `split(s, "/")` |
-| join | Build string from parts | `join(parts, "-")` |
-| replace | Replace values | `replace(s, "old", "new")` |
+| `.Length` | String length | `$s.Length` |
+| `.Contains()` | Substring check | `$s.Contains('api')` |
+| `.StartsWith()` / `.EndsWith()` | Prefix/suffix checks | `$s.StartsWith('pre')` |
+| `.Substring()` | Extract section | `$s.Substring(0, 5)` |
+| `.Split()` / `-split` | Split into array | `$s -split ','` |
+| `.Replace()` / `-replace` | Replacement (`-replace` supports regex) | `$s -replace '-', ' '` |
+| `.Trim()` / `.TrimStart()` / `.TrimEnd()` | Trim whitespace/chars | `$s.Trim()` |
+| `.ToUpper()` / `.ToLower()` | Case conversion | `$s.ToLower()` |
+| `.IndexOf()` / `.LastIndexOf()` | Find position | `$s.IndexOf('/')` |
+| `-match` | Regex test and captures | `$s -match '\w+'` |
 
-## Example
+## Examples
 
-```text
-input: "whale,pedia"
-output: ["whale", "pedia"]
+```powershell
+$raw = ' whale-pedia '
+$clean = $raw.Trim() -replace '-', ' '
+$parts = $clean -split ' '
 ```

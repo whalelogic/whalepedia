@@ -1,26 +1,30 @@
 # C Functions
 
-Function patterns and common C standard-library calls.
+C functions are declared with explicit signatures and often use standard library calls for core tasks.
 
-| Function Pattern | Description |
-| --- | --- |
-| Named function | Reusable unit with a stable name |
-| Variadic function | Uses `...` with `stdarg.h` (`printf`, etc.) |
-| Function pointer callback | Pass behavior to another function |
-| Dispatcher function | Routes work based on flags/types |
+## Function Syntax and Patterns
 
-| Common C Function | Purpose |
-| --- | --- |
-| `printf` / `fprintf` | Formatted output |
-| `snprintf` | Safe formatted string write with size limit |
-| `qsort` | Generic array sort with comparator callback |
-| `bsearch` | Binary search with comparator callback |
-| `perror` | Print readable error message from `errno` |
+| Pattern | Purpose | Example |
+| --- | --- | --- |
+| `ret name(args);` | Forward declaration (prototype) | `int add(int a, int b);` |
+| `ret name(args) {}` | Function definition | `int add(int a, int b) { return a+b; }` |
+| `void` return | Procedure with no return value | `void log_msg(const char *s)` |
+| Function pointer | Pass behavior as argument | `int (*cmp)(const void*, const void*)` |
+| `static` function | Internal linkage/file scope | `static int parse(const char *s)` |
 
-## Example
+## Common Standard Library Functions
+
+| Function | Purpose | Example |
+| --- | --- | --- |
+| `printf` / `fprintf` | Formatted output | `printf("%d\n", n)` |
+| `snprintf` | Bounded formatted output | `snprintf(buf, sz, "%s", s)` |
+| `malloc` / `calloc` / `free` | Dynamic memory lifecycle | `ptr = malloc(sz); free(ptr);` |
+| `qsort` | Generic sorting | `qsort(arr, n, sizeof(int), cmp)` |
+| `bsearch` | Binary search in sorted data | `bsearch(&key, arr, n, sz, cmp)` |
+
+## Examples
 
 ```c
-int add(int a, int b) {
-    return a + b;
-}
+static int add(int a, int b) { return a + b; }
+printf("sum=%d\n", add(2, 3));
 ```

@@ -1,83 +1,31 @@
-::: content
-# Python Functions {#python-functions .title}
+# Python Functions
 
-A function is a block of organized, reusable code that is used to
-perform a single, related action. Functions provide better modularity
-for your application and a high degree of code reusing.
+Python functions are first-class objects with flexible argument models.
 
-## Defining a Function {#defining-a-function .subtitle}
+## Function Patterns
 
-You can define a function using the `def` keyword.
+| Pattern | Purpose | Example |
+| --- | --- | --- |
+| `def name(...)` | Standard function definition | `def add(a, b):` |
+| Type hints | Declare expected types/contracts | `def add(a: int, b: int) -> int:` |
+| Default args | Optional values | `def greet(name='dev'):` |
+| `*args` / `**kwargs` | Variadic positional/keyword args | `def f(*args, **kwargs):` |
+| `lambda` | Small anonymous function | `lambda x: x * 2` |
 
-    def greet(name):
-        """This function greets the person passed in as a parameter."""
-        print(f"Hello, {name}!")
+## Common Built-in Functions
 
-    # Calling the function
-    greet("Alice")  # "Hello, Alice!"
+| Built-in | Purpose | Example |
+| --- | --- | --- |
+| `print` | Output values | `print(value)` |
+| `len` | Collection/string length | `len(items)` |
+| `map` / `filter` | Functional transforms/filters | `map(str, nums)` |
+| `enumerate` | Index + value iteration | `enumerate(items, start=1)` |
+| `zip` | Parallel iteration over iterables | `zip(a, b)` |
+| `sum` / `min` / `max` | Aggregate values | `sum(scores)` |
 
-## Arguments {#arguments .subtitle}
+## Examples
 
-Information can be passed into functions as arguments. Arguments are
-specified after the function name, inside the parentheses.
-
-### Positional and Keyword Arguments {#positional-and-keyword-arguments .subtitle}
-
-    def describe_pet(animal_type, pet_name):
-        """Display information about a pet."""
-        print(f"I have a {animal_type}.")
-        print(f"My {animal_type}'s name is {pet_name.title()}.")
-
-    # Positional arguments
-    describe_pet("hamster", "harry")
-
-    # Keyword arguments
-    describe_pet(pet_name="willie", animal_type="dog")
-
-### Default Arguments {#default-arguments .subtitle}
-
-    def describe_pet(pet_name, animal_type="dog"):
-        """Display information about a pet with a default animal type."""
-        print(f"I have a {animal_type}.")
-        print(f"My {animal_type}'s name is {pet_name.title()}.")
-
-    describe_pet("willie")  # Uses the default animal_type "dog"
-
-### Arbitrary Arguments {#arbitrary-arguments .subtitle}
-
-If you do not know how many arguments will be passed into your function,
-you can use `*args` for non-keyword arguments and `**kwargs` for keyword
-arguments.
-
-    def make_pizza(*toppings):
-        """Print the list of toppings that have been requested."""
-        print(toppings)
-
-    make_pizza("pepperoni")
-    make_pizza("mushrooms", "green peppers", "extra cheese")
-
-    def build_profile(first, last, **user_info):
-        """Build a dictionary containing everything we know about a user."""
-        profile = {"first_name": first, "last_name": last}
-        for key, value in user_info.items():
-            profile[key] = value
-        return profile
-
-    user_profile = build_profile("albert", "einstein",
-                                 location="princeton",
-                                 field="physics")
-    print(user_profile)
-
-## Lambda Functions {#lambda-functions .subtitle}
-
-A lambda function is a small anonymous function. A lambda function can
-take any number of arguments, but can only have one expression.
-
-    # A lambda function that adds 10 to the number passed in as an argument
-    x = lambda a: a + 10
-    print(x(5))  # 15
-
-    # A lambda function that multiplies two arguments
-    multiply = lambda x, y: x * y
-    print(multiply(5, 6))  # 30
-:::
+```python
+def transform(values: list[int], fn):
+    return [fn(v) for v in values]
+```

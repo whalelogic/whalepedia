@@ -1,74 +1,32 @@
-::: content
-# JavaScript Functions {#javascript-functions .title}
+# JavaScript Functions
 
-Functions are one of the fundamental building blocks in JavaScript. A
-function is a reusable block of code that performs a specific task.
+JavaScript functions are first-class values and power callbacks, async flows, and composition.
 
-## Defining Functions {#defining-functions .subtitle}
+## Function Patterns
 
-There are several ways to define a function in JavaScript.
+| Pattern | Purpose | Example |
+| --- | --- | --- |
+| Function declaration | Hoisted named function | `function add(a, b) { return a + b; }` |
+| Function expression | Assign function to variable | `const add = function(a, b) { ... }` |
+| Arrow function | Concise lexical-`this` function | `const add = (a, b) => a + b;` |
+| Default params | Optional argument defaults | `function f(x = 0) {}` |
+| Rest params `...args` | Variadic arguments | `function sum(...args) {}` |
 
-### Function Declaration {#function-declaration .subtitle}
+## Common Built-ins Used with Functions
 
-    function greet(name) {
-      return `Hello, ${name}!`;
-    }
-    console.log(greet("World"));
+| API | Purpose | Example |
+| --- | --- | --- |
+| `setTimeout` / `setInterval` | Schedule callbacks | `setTimeout(fn, 500)` |
+| `Array.prototype.map` | Transform collection with callback | `arr.map(x => x * 2)` |
+| `Array.prototype.filter` | Select values by predicate | `arr.filter(x => x > 0)` |
+| `Promise.then` / `catch` | Async callback chaining | `fetch().then(parse).catch(handle)` |
+| `Function.prototype.bind` | Bind `this` and preset args | `handler.bind(ctx)` |
 
-### Function Expression {#function-expression .subtitle}
+## Examples
 
-    const greet = function(name) {
-      return `Hello, ${name}!`;
-    };
-    console.log(greet("World"));
-
-### Arrow Function {#arrow-function .subtitle}
-
-Arrow functions provide a more concise syntax for writing functions.
-
-    const greet = (name) => {
-      return `Hello, ${name}!`;
-    };
-    console.log(greet("World"));
-
-    // For single expression functions, you can omit the braces and return statement
-    const add = (a, b) => a + b;
-    console.log(add(2, 3)); // 5
-
-## Function Parameters {#function-parameters .subtitle}
-
-JavaScript functions can accept parameters. You can also define default
-and rest parameters.
-
-    // Default parameters
-    function greet(name = "Guest") {
-      console.log(`Hello, ${name}!`);
-    }
-    greet(); // "Hello, Guest!"
-    greet("Alice"); // "Hello, Alice!"
-
-    // Rest parameters
-    function sum(...numbers) {
-      return numbers.reduce((acc, current) => acc + current, 0);
-    }
-    console.log(sum(1, 2, 3)); // 6
-
-## Higher-Order Functions {#higher-order-functions .subtitle}
-
-Functions that operate on other functions, either by taking them as
-arguments or by returning them, are called higher-order functions.
-
-    function withLogging(fn) {
-      return function(...args) {
-        console.log(`Calling function ${fn.name}`);
-        return fn(...args);
-      };
-    }
-
-    function add(a, b) {
-      return a + b;
-    }
-
-    const loggedAdd = withLogging(add);
-    console.log(loggedAdd(3, 4));
-:::
+```javascript
+const withLog = (fn) => (...args) => {
+  console.log('calling', fn.name);
+  return fn(...args);
+};
+```

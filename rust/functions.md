@@ -1,22 +1,31 @@
 # Rust Functions
 
-Function patterns, signatures, and common built-ins.
+Rust functions are explicitly typed, expression-oriented, and commonly combined with iterators and closures.
 
-| Function Pattern | Description |
-| --- | --- |
-| Named function | Reusable unit with a stable name |
-| Anonymous/lambda function | Inline function for small logic |
-| Variadic/rest function | Accepts variable argument count |
-| Higher-order function | Receives or returns functions |
+## Function Patterns
 
-| Built-in / Common Function | Purpose |
-| --- | --- |
-| print/log | Output values for debugging |
-| format/string interpolation | Build readable messages |
-| error/exception handling helper | Propagate and handle failures |
+| Pattern | Purpose | Example |
+| --- | --- | --- |
+| `fn name(args) -> T` | Standard function declaration | `fn add(a: i32, b: i32) -> i32` |
+| Expression return | Return last expression without `;` | `a + b` |
+| Early `return` | Exit function explicitly | `return Err(e);` |
+| Generic function | Reusable across types | `fn first<T>(items: &[T]) -> Option<&T>` |
+| Closure `|x| ...` | Inline anonymous function | `items.iter().map(|x| x * 2)` |
 
-## Example
+## Common Built-in/Std Function Helpers
 
-```text
-transform(data, fn)
+| API | Purpose | Example |
+| --- | --- | --- |
+| `println!` / `format!` | Output and string formatting | `println!("{x}")` |
+| `dbg!` | Debug-print expression and value | `dbg!(value)` |
+| `drop` | Explicitly drop value early | `drop(lock)` |
+| `std::mem::take` / `replace` | Move/replace values safely | `std::mem::take(&mut buf)` |
+| Iterator adapters (`map`, `filter`, `fold`) | Functional data processing | `nums.iter().fold(0, |a, n| a + n)` |
+
+## Examples
+
+```rust
+fn transform(values: &[i32], f: impl Fn(i32) -> i32) -> Vec<i32> {
+    values.iter().map(|v| f(*v)).collect()
+}
 ```

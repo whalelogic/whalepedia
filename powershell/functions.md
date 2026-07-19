@@ -1,22 +1,33 @@
 # PowerShell Functions
 
-Function patterns, signatures, and common built-ins.
+PowerShell functions support advanced cmdlet-style behavior and pipeline input.
 
-| Function Pattern | Description |
-| --- | --- |
-| Named function | Reusable unit with a stable name |
-| Anonymous/lambda function | Inline function for small logic |
-| Variadic/rest function | Accepts variable argument count |
-| Higher-order function | Receives or returns functions |
+## Function Patterns
 
-| Built-in / Common Function | Purpose |
-| --- | --- |
-| print/log | Output values for debugging |
-| format/string interpolation | Build readable messages |
-| error/exception handling helper | Propagate and handle failures |
+| Pattern | Purpose | Example |
+| --- | --- | --- |
+| `function Name {}` | Basic reusable function | `function Get-User { ... }` |
+| `param(...)` | Typed parameter definition | `param([string]$Name)` |
+| `[CmdletBinding()]` | Enable advanced function features | `[CmdletBinding()] param(...)` |
+| Pipeline blocks | Structured pipeline handling | `begin { } process { } end { }` |
+| `return` / output stream | Emit values to pipeline | `return $result` |
 
-## Example
+## Common Built-in Cmdlets for Function Workflows
 
-```text
-transform(data, fn)
+| Cmdlet | Purpose | Example |
+| --- | --- | --- |
+| `Write-Output` / `Write-Host` | Emit output | `Write-Output $value` |
+| `Write-Error` / `Throw` | Signal errors | `Throw "Invalid input"` |
+| `Get-Command` | Inspect available commands | `Get-Command Get-*` |
+| `ForEach-Object` / `Where-Object` | Functional-style pipeline transforms | `$items | ForEach-Object { ... }` |
+| `Measure-Command` | Profile function execution time | `Measure-Command { Invoke-Task }` |
+
+## Examples
+
+```powershell
+function Get-Greeting {
+  [CmdletBinding()]
+  param([Parameter(Mandatory)] [string]$Name)
+  "Hello, $Name"
+}
 ```

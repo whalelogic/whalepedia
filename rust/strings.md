@@ -1,18 +1,26 @@
 # Rust Strings
 
-Core string operations and helpers.
+Rust provides `String` (owned) and `&str` (borrowed slice) for string handling.
 
-| Function / Method | Purpose | Example |
+## Common `String` / `str` Methods
+
+| Method | Purpose | Example |
 | --- | --- | --- |
-| length/len | Get string length | `len(s)` or equivalent |
-| contains/includes | Substring check | `contains(s, "api")` |
-| split | Break into parts | `split(s, "/")` |
-| join | Build string from parts | `join(parts, "-")` |
-| replace | Replace values | `replace(s, "old", "new")` |
+| `len()` | Byte length | `s.len()` |
+| `contains()` | Substring check | `s.contains("api")` |
+| `starts_with()` / `ends_with()` | Prefix/suffix checks | `s.starts_with("pre")` |
+| `find()` / `rfind()` | Locate substring index | `s.find('/')` |
+| `split()` / `split_whitespace()` | Iterate split parts | `s.split(',')` |
+| `replace()` / `replacen()` | Replacement helpers | `s.replace('_', "-")` |
+| `trim()` / `trim_start()` / `trim_end()` | Trim whitespace | `s.trim()` |
+| `to_uppercase()` / `to_lowercase()` | Case conversion | `s.to_lowercase()` |
+| `push()` / `push_str()` | Append chars/text to `String` | `owned.push_str("!")` |
+| `chars()` | Unicode scalar iteration | `for c in s.chars() {}` |
 
-## Example
+## Examples
 
-```text
-input: "whale,pedia"
-output: ["whale", "pedia"]
+```rust
+let raw = " whale_pedia ";
+let clean = raw.trim().replace('_', "-");
+let parts: Vec<&str> = clean.split('-').collect();
 ```

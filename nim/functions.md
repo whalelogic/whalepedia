@@ -1,22 +1,30 @@
 # Nim Functions
 
-Function patterns, signatures, and common built-ins.
+Nim distinguishes between `proc`, `func`, `method`, and iterator-style callable constructs.
 
-| Function Pattern | Description |
-| --- | --- |
-| Named function | Reusable unit with a stable name |
-| Anonymous/lambda function | Inline function for small logic |
-| Variadic/rest function | Accepts variable argument count |
-| Higher-order function | Receives or returns functions |
+## Function/Callable Patterns
 
-| Built-in / Common Function | Purpose |
-| --- | --- |
-| print/log | Output values for debugging |
-| format/string interpolation | Build readable messages |
-| error/exception handling helper | Propagate and handle failures |
+| Construct | Purpose | Example |
+| --- | --- | --- |
+| `proc` | General procedure (can have side effects) | `proc add(a, b: int): int = a + b` |
+| `func` | Side-effect-free function (enforced) | `func sq(x: int): int = x * x` |
+| `method` | Dynamically dispatched routine | `method draw(s: Shape)` |
+| `iterator` | Lazy-yield sequence values | `iterator nums(): int = ...` |
+| `template` | Compile-time code expansion | `template log(x) = echo x` |
 
-## Example
+## Common Built-ins and Routine Helpers
 
-```text
-transform(data, fn)
+| Routine | Purpose | Example |
+| --- | --- | --- |
+| `echo` | Output values | `echo value` |
+| `assert` / `doAssert` | Validate assumptions | `doAssert n >= 0` |
+| `len` / `high` / `low` | Collection/index helpers | `len(items)` |
+| `mapIt` / `filterIt` | Functional sequence transforms | `items.mapIt(it * 2)` |
+| `try/except` + `raise` | Error handling flow | `raise newException(...)` |
+
+## Examples
+
+```nim
+proc transform(values: seq[int], op: proc (x: int): int): seq[int] =
+  result = values.map(op)
 ```

@@ -1,18 +1,26 @@
 # JavaScript Strings
 
-Core string operations and helpers.
+JavaScript strings are immutable UTF-16 sequences with many built-in prototype methods.
 
-| Function / Method | Purpose | Example |
+## Common `String` Methods
+
+| Method / Property | Purpose | Example |
 | --- | --- | --- |
-| length/len | Get string length | `len(s)` or equivalent |
-| contains/includes | Substring check | `contains(s, "api")` |
-| split | Break into parts | `split(s, "/")` |
-| join | Build string from parts | `join(parts, "-")` |
-| replace | Replace values | `replace(s, "old", "new")` |
+| `length` | Character count (UTF-16 code units) | `s.length` |
+| `includes` | Substring check | `s.includes('api')` |
+| `startsWith` / `endsWith` | Prefix/suffix checks | `s.startsWith('pre')` |
+| `slice` / `substring` | Extract part of string | `s.slice(0, 5)` |
+| `split` | Split into array | `s.split(',')` |
+| `replace` / `replaceAll` | Replace first/all matches | `s.replaceAll('-', ' ')` |
+| `trim` / `trimStart` / `trimEnd` | Remove surrounding whitespace | `s.trim()` |
+| `toUpperCase` / `toLowerCase` | Case conversion | `s.toUpperCase()` |
+| `indexOf` / `lastIndexOf` | Locate substring index | `s.indexOf('/')` |
+| `match` / `matchAll` | Regex matching | `s.match(/\w+/g)` |
 
-## Example
+## Examples
 
-```text
-input: "whale,pedia"
-output: ["whale", "pedia"]
+```javascript
+const raw = ' whale-pedia ';
+const clean = raw.trim().replaceAll('-', ' ');
+const words = clean.split(' ');
 ```

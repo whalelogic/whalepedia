@@ -1,18 +1,26 @@
 # TypeScript Strings
 
-Core string operations and helpers.
+TypeScript uses JavaScript `String` methods with compile-time type safety.
 
-| Function / Method | Purpose | Example |
+## Common `String` Methods
+
+| Method / Property | Purpose | Example |
 | --- | --- | --- |
-| length/len | Get string length | `len(s)` or equivalent |
-| contains/includes | Substring check | `contains(s, "api")` |
-| split | Break into parts | `split(s, "/")` |
-| join | Build string from parts | `join(parts, "-")` |
-| replace | Replace values | `replace(s, "old", "new")` |
+| `length` | Character count (UTF-16 code units) | `s.length` |
+| `includes` | Substring check | `s.includes('api')` |
+| `startsWith` / `endsWith` | Prefix/suffix checks | `s.startsWith('pre')` |
+| `slice` / `substring` | Extract section | `s.slice(0, 5)` |
+| `split` | Split into array | `s.split(',')` |
+| `replace` / `replaceAll` | Replace first/all matches | `s.replaceAll('_', '-')` |
+| `trim` / `trimStart` / `trimEnd` | Remove surrounding whitespace | `s.trim()` |
+| `toUpperCase` / `toLowerCase` | Case conversion | `s.toUpperCase()` |
+| `indexOf` / `lastIndexOf` | Find index of match | `s.indexOf('/')` |
+| `match` / `matchAll` | Regex matching | `s.match(/\w+/g)` |
 
-## Example
+## Examples
 
-```text
-input: "whale,pedia"
-output: ["whale", "pedia"]
+```ts
+const raw: string = ' whale_pedia ';
+const clean = raw.trim().replaceAll('_', '-');
+const parts = clean.split('-');
 ```

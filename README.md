@@ -6,7 +6,7 @@ content than others. I've created these references over the years throughout my 
 > Feel free to copy or download this content to build off of and start your own knowledge base.
 
 
-## Contents:
+## 🎁 Contents
 
 1. Algorithms
 2. Bash

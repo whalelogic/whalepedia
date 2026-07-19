@@ -81,7 +81,7 @@ case "$name" in
   *) echo "Standard name path" ;;
 esac
 
-echo "glob demo (*.md in current directory):"
+echo "glob demo (./*.md in current directory):"
 shopt -s nullglob
 md_files=(./*.md)
 if ((${#md_files[@]} == 0)); then

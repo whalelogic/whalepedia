@@ -45,12 +45,12 @@ func main() {
 	var name string
 	name = "Go"
 
-	var version = 1.22
+	var goVersion = 1.22
 	x, y := 10, 20
 	active := true
 
 	fmt.Printf("Hello, %s (%s examples)\n", name, project)
-	fmt.Printf("Version: %.2f\n", version)
+	fmt.Printf("Version: %.2f\n", goVersion)
 	fmt.Printf("x=%d y=%d active=%t\n", x, y, active)
 	fmt.Printf("Pi constant: %.5f\n", pi)
 

@@ -11,7 +11,9 @@ echo "Bash version: $BASH_VERSION"
 echo "Script name: $0"
 echo "PID: $$"
 echo "Arg count: $#"
-echo "All args quoted with \"\$@\": $*"
+printf 'All args quoted with "$@":'
+printf ' [%s]' "$@"
+printf '\n'
 echo
 
 name="${1:-world}"
@@ -23,6 +25,10 @@ echo
 
 readonly max_jobs=4
 jobs_to_run="${2:-3}"
+if [[ ! "$jobs_to_run" =~ ^[0-9]+$ ]]; then
+  echo "Invalid jobs value '${jobs_to_run}', defaulting to 3"
+  jobs_to_run=3
+fi
 if (( jobs_to_run > max_jobs )); then
   echo "Requested jobs exceed max (${max_jobs}), capping to max"
   jobs_to_run=$max_jobs

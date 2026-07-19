@@ -1,6 +1,6 @@
 # Bash Objects (Shell-Friendly Patterns)
 
-Objects (Shell-Friendly Patterns) model and common member patterns.
+Objects (Shell-Friendly Patterns) model data and common member patterns.
 
 | Concept | Description | Example |
 | --- | --- | --- |

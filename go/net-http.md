@@ -1,192 +1,121 @@
-### HTTP Server and WebSocket Upgrading (net/http)
+# Go `net/http` Reference
 
-The `net/http` package provides HTTP client and server implementations. For WebSockets, while the standard library does not provide a high-level WebSocket f
-rame parser, it provides the fundamental `http.Hijacker` interface. This interface allows a handler to take over the underlying TCP connection from the HTTP
- server, which is the prerequisite for "upgrading" an HTTP connection to the WebSocket protocol.
+Reference for core server/client APIs in the standard library package `net/http`.
 
----
+## Core types and interfaces
 
-### Pseudo-code
+| Symbol | Kind | Purpose |
+| --- | --- | --- |
+| `http.Client` | type | Sends HTTP requests |
+| `http.Request` | type | Incoming or outgoing HTTP request |
+| `http.Response` | type | HTTP response returned from transport/server |
+| `http.Server` | type | Configurable HTTP server |
+| `http.Handler` | interface | Handles HTTP requests (`ServeHTTP`) |
+| `http.HandlerFunc` | type | Function adapter for `Handler` |
+| `http.RoundTripper` | interface | Low-level transport implementation |
+| `http.Cookie` | type | HTTP cookie value |
 
-```go
-// 1. Define a multiplexer (router)
-mux := http.NewServeMux()
+## Common package-level functions
 
-// 2. Register standard HTTP handlers
-mux.HandleFunc("/api/data", handleData)
+| Function | Purpose |
+| --- | --- |
+| `http.Get` | Send a `GET` request |
+| `http.Post` | Send a `POST` request |
+| `http.PostForm` | Submit URL-encoded form data |
+| `http.Head` | Send a `HEAD` request |
+| `http.NewRequest` / `http.NewRequestWithContext` | Build a request object |
+| `http.ListenAndServe` | Start HTTP server on address |
+| `http.ListenAndServeTLS` | Start HTTPS server |
+| `http.Handle` / `http.HandleFunc` | Register handlers on default mux |
+| `http.FileServer` | Serve files from a filesystem |
+| `http.Redirect` | Redirect request to another URL |
+| `http.Error` | Write error response helper |
 
-// 3. Register a WebSocket upgrade handler
-mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-    // Validate request (Headers, Method, Origin)
-    // Check if ResponseWriter supports Hijacking
-    hj, ok := w.(http.Hijacker)
+## `http.Client` methods
 
-    // Hijack the TCP connection
-    conn, bufrw, err := hj.Hijack()
-    defer conn.Close()
+| Method | Purpose |
+| --- | --- |
+| `Do` | Execute prepared request |
+| `Get` | Convenience GET |
+| `Post` | Convenience POST |
+| `PostForm` | Convenience form POST |
+| `Head` | Convenience HEAD |
+| `CloseIdleConnections` | Close keep-alive idle connections |
 
-    // Send HTTP 101 Switching Protocols response manually
-    bufrw.WriteString("HTTP/1.1 101 Switching Protocols\r\n")
-    bufrw.WriteString("Upgrade: websocket\r\n")
-    bufrw.WriteString("Connection: Upgrade\r\n\r\n")
-    bufrw.Flush()
+## `http.ResponseWriter` + `http.Request` usage map
 
-    // Enter full-duplex communication loop
-    for {
-        // Read/Write raw bytes according to RFC 6455
-    }
-})
+| API | Purpose |
+| --- | --- |
+| `w.Header().Set` | Set response headers |
+| `w.WriteHeader` | Set status code |
+| `w.Write` | Write response body |
+| `r.Context()` | Access request context |
+| `r.URL.Query()` | Read query string values |
+| `r.FormValue` | Read form values |
+| `r.Cookie` | Read cookie by name |
 
-// 4. Configure and start the server
-server := &http.Server{Addr: ":8080", Handler: mux}
-server.ListenAndServe()
-```
+## `http.Server` fields to know
 
----
+| Field | Why it matters |
+| --- | --- |
+| `Addr` | Bind address |
+| `Handler` | Router/mux implementation |
+| `ReadTimeout` | Prevent slow-read abuse |
+| `WriteTimeout` | Bound write duration |
+| `IdleTimeout` | Control keep-alive idle windows |
+| `MaxHeaderBytes` | Protect header parsing limits |
 
-### Mermaid Flow Diagram
-
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant S as net/http Server
-    participant H as Handler (Hijacker)
-
-    C->>S: GET /ws (Upgrade: websocket)
-    S->>H: Invoke ServeHTTP(w, r)
-    Note over H: Validate Headers
-    H->>S: Hijack() Connection
-    S-->>H: Returns net.Conn & *bufio.ReadWriter
-    H->>C: HTTP/1.1 101 Switching Protocols
-    Note over C,H: TCP Connection is now "Upgraded"
-    loop Full Duplex
-        C->>H: Send Binary/Text Frames
-        H->>C: Send Binary/Text Frames
-    end
-    H->>C: Close Connection
-```
-
----
-
-### Examples
-
-#### 1. Production-Grade HTTP Server with Timeouts
-
-This example demonstrates setting up a robust HTTP server using `net/http` with proper timeout configurations to prevent resource exhaustion.
+## Example: JSON API endpoint
 
 ```go
 package main
 
 import (
-        "context"
-        "net/http"
-        "time"
+	"encoding/json"
+	"net/http"
+	"time"
 )
 
 func main() {
-        mux := http.NewServeMux()
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	})
 
-        // Registering a handler
-        mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
-                w.Header().Set("Content-Type", "application/json")
-                w.WriteHeader(http.StatusOK)
-                w.Write([]byte(`{"status":"ok"}`))
-        })
+	srv := &http.Server{
+		Addr:         ":8080",
+		Handler:      mux,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  30 * time.Second,
+	}
 
-        server := &http.Server{
-                Addr:         ":8080",
-                Handler:      mux,
-                ReadTimeout:  5 * time.Second,
-                WriteTimeout: 10 * time.Second,
-                IdleTimeout:  120 * time.Second,
-        }
-
-        // In a real app, use signal.Notify to trigger server.Shutdown(ctx)
-        server.ListenAndServe()
+	_ = srv.ListenAndServe()
 }
 ```
 
-#### 2. Manual WebSocket Upgrade via Hijacking
-
-Since `net/http` doesn't parse WebSocket frames, this snippet shows how to perform the handshake. (In production, one would typically use a library like `nh
-ooyr.io/websocket` which wraps this logic).
+## Example: outbound request with context
 
 ```go
 package main
 
 import (
-        "bufio"
-        "fmt"
-        "net/http"
+	"context"
+	"net/http"
+	"time"
 )
 
-func wsHandler(w http.ResponseWriter, r *http.Request) {
-        // Verify the Upgrade header
-        if r.Header.Get("Upgrade") != "websocket" {
-                http.Error(w, "Expected websocket upgrade", http.StatusBadRequest)
-                return
-        }
+func main() {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
-        // Type assert to http.Hijacker
-        hj, ok := w.(http.Hijacker)
-        if !ok {
-                http.Error(w, "Webserver doesn't support hijacking", http.StatusInternalServerError)
-                return
-        }
-
-        // Take control of the connection
-        conn, bufrw, err := hj.Hijack()
-        if err != nil {
-                http.Error(w, err.Error(), http.StatusInternalServerError)
-                return
-        }
-        defer conn.Close()
-
-        // Perform Handshake (simplified - missing Sec-WebSocket-Accept calculation)
-        bufrw.WriteString("HTTP/1.1 101 Switching Protocols\r\n")
-        bufrw.WriteString("Upgrade: websocket\r\n")
-        bufrw.WriteString("Connection: Upgrade\r\n\r\n")
-        bufrw.Flush()
-
-        // Start reading raw data (this will be encoded in WebSocket frames)
-        data, _, _ := bufrw.ReadLine()
-        fmt.Printf("Received raw frame data: %s\n", string(data))
+	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, "https://example.com", nil)
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
 }
 ```
-
----
-
-### Usage
-
-**When to use `net/http`:**
-
-- **REST APIs**: Building standard JSON/XML web services.
-- **Static File Serving**: Using `http.FileServer` to serve assets.
-- **Middleware**: Implementing authentication, logging, or rate limiting via the `http.Handler` interface.
-
-**When to use `http.Hijacker` (for WebSockets):**
-
-- **Protocol Switching**: When you need to transition from HTTP to a different protocol (like WebSockets, gRPC, or a custom binary protocol) over the same p
-  ort.
-- **Real-time Communication**: Use as the foundation for chat apps, live dashboards, or gaming servers.
-- **Custom Proxying**: Implementing low-level reverse proxies that require direct TCP stream manipulation.
-
----
-
-### Similar Features
-
-| Signatures                  | Description                                                    | Usage                                                                     |
-|:--------------------------- |:-------------------------------------------------------------- |:------------------------------------------------------------------------- |
-| `http.Handler`              | An interface with `ServeHTTP(ResponseWriter, *Request)`.       | The primary interface for all web logic in Go.                            |
-| `http.Hijacker`             | An interface to take over the connection from the HTTP server. | Essential for WebSockets and custom protocol upgrades.                    |
-| `http.Pusher`               | An interface for HTTP/2 Server Push.                           | Used to proactively send resources to a client before they are requested. |
-| `httptest.ResponseRecorder` | An implementation of `ResponseWriter` for unit tests.          | Used to capture the output of a handler for assertions in tests.          |
-
----
-
-### References
-
-- [Go net/http Documentation](https://pkg.go.dev/net/http)
-- [Go http.Hijacker Interface](https://pkg.go.dev/net/http#Hijacker)
-- [RFC 6455 - The WebSocket Protocol](https://datatracker.ietf.org/doc/html/rfc6455)
-- [Build a Web Server - Go Dev Tutorial](https://go.dev/doc/articles/wiki/)
